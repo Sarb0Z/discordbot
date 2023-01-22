@@ -32,7 +32,28 @@ client.on('message', async message => {
             return
  
         }
+        if (fs.existsSync(path.join(__dirname,'playlist', `${args.join(" ")}.m4a` ))) {
 
+            voice.channel.join().then((connection) => 
+            {
+                const dispatcher=  connection.play(path.join(__dirname,'playlist', `${args.join(" ")}.m4a` ))
+                dispatcher.on("finish", finish => {voice.channel.leave()})
+               
+            })
+             message.reply(`Now playing **${args.join(" ")}**`)
+        }
+        else{
+            message.channel.send(`**${args.join(" ")}** does not exist.`)
+        }
+    
+    }
+    else if (command==='leave'){        
+        const { voice } = message.member
+        if (!voice.channelID) {
+            message.reply('You must be in a voice channel')
+            return
+ 
+        }
         voice.channel.leave()
         message.channel.reply("Leaving channel")
 
